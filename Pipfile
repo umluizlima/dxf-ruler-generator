@@ -5,6 +5,7 @@ name = "pypi"
 
 [packages]
 ezdxf = "*"
+dxfwrite = "*"
 
 [dev-packages]
 
