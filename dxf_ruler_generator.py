@@ -5,94 +5,60 @@ rulers, which can be easily manufactured at the nearest FabLab.
 
 Example
 -------
-Examples can be given using either the ``Example`` or ``Examples``
-sections. Sections support any reStructuredText formatting, including
-literal blocks::
+Generate a 7cm ruler:
 
-    $ python dxf_ruler_generator.py
-    Ruler length (in centimeters): 15
+    $ python -m dxf_ruler_generator 7
+
+This will create a 'ruler_7cm.dxf' on the current working directory.
 
 """
-import os
-from dxfwrite import DXFEngine as dxf
+from argparse import ArgumentParser
+import ezdxf
 
 
-class Ruler:
-    """Ruler.
+parser = ArgumentParser(description="Generate rulers for digital fabrication.")
+parser.add_argument("length", metavar="L", type=int,
+                    help="an integer for the ruler's length, in centimeters.")
+parser.add_argument("width", metavar="W", type=int, nargs="?", default=30,
+                    help="an integer for the ruler's width, in milimeters.")
+parser.add_argument("tick_width", metavar="TW", type=float,
+                    nargs="?", default=.25,
+                    help="a float for the tick's width, in milimeters.")
+args = parser.parse_args()
 
-    Parameters
-    ----------
-    ruler_length: int
-        Ruler's length, in centimeters. Total length will be ruler_length + 1.
-    ruler_width: int, optional
-        Ruler's width, in milimeters.
-    tick_width: int, optional
-        The width of each individual tick on the ruler, in milimeters.
+dwg = ezdxf.new('R2010')
+dwg.layers.new(name='CUT', dxfattribs={'color': 7})
+dwg.layers.new(name='SCAN', dxfattribs={'color': 5})
 
-    """
+msp = dwg.modelspace()
 
-    def __init__(self,
-                 ruler_length: int,
-                 ruler_width: int = 30,
-                 tick_width: float = .25):
-        self.length = ruler_length
-        self.width = ruler_width    # ruler width
-        self.tick_width = tick_width    # width of each engraved line
-        self.tick_offset = 5 - self.tick_width / 2
+ruler_outline = [(0, 0),
+                 (10*(args.length+1), 0),
+                 (10*(args.length+1), args.width),
+                 (0, args.width),
+                 (0, 0)]
+msp.add_lwpolyline(ruler_outline, dxfattribs={'layer': 'CUT'})
 
-    # creates a black layer and then draws the ruler's external shape
-    def _draw_ruler(self):
-        self.file.add_layer('CUT', color=7)
-        self.file.add(dxf.rectangle([0, 0],
-                                    10 * self.length + 10,
-                                    self.width,
-                                    layer='CUT'))
-        return self
+for mm in range(10*args.length+1):
+    x = mm + 5 - args.tick_width / 2
+    if mm == 0 or mm % 10 == 0:
+        tick_height = args.width / 3
+        msp.add_text(
+            str(mm//10),
+            dxfattribs={'rotation': 90,
+                        'height': 2,
+                        'layer': 'SCAN'}
+        ).set_pos((x-1, args.width-tick_height))
+    elif mm % 5 == 0:
+        tick_height = args.width / 6
+    else:
+        tick_height = args.width / 12
 
-    # creates a blue layer and calls the method that draws milimiter lines once for every centimeter
-    def _draw_centimeter(self):
-        self.file.add_layer('SCAN', color=5)
-        for cm in range(self.length + 1):
-            self._draw_milimeter(cm)
-        return self
+    ruler_tick = [(x, args.width),
+                  (x, args.width-tick_height),
+                  (x+.25, args.width-tick_height),
+                  (x+.25, args.width),
+                  (x, args.width)]
+    msp.add_lwpolyline(ruler_tick, dxfattribs={'layer': 'SCAN'})
 
-    #Desenha cada marcação de um centímetro, com diferentes tamanhos para 0 e 5 milimetros
-    def _draw_milimeter(self, cm: int):
-        for mm in range(10):
-            x_pos = self.tick_offset + 10 * cm + mm
-            if mm == 0:     # draws a longer line at centimeter start
-                y_pos = 20
-                self.file.add(dxf.text(str(cm),
-                                       [x_pos - 1, 20],
-                                       height=2,
-                                       rotation=90,
-                                       layer='SCAN'))
-            elif mm == 5:    # draws middle sized line at half centimeter
-                y_pos = 25
-            else:    # draws short line at every other milimeter
-                y_pos = 27.5
-            self.file.add(dxf.rectangle([x_pos, y_pos],
-                                        self.tick_width,
-                                        self.width - y_pos,
-                                        layer='SCAN'))
-            if cm == self.length:
-                break
-        return self
-
-    def draw(self):
-        if not os.path.lexists(os.path.join('.', 'rulers')):
-            os.mkdir(os.path.join('.', 'rulers'))
-        self.file = dxf.drawing(os.path.join('.',
-                                             'rulers',
-                                             f'ruler_{self.length}cm.dxf'))
-        self.file.header['$INSUNITS'] = 4
-        self._draw_ruler()
-        self._draw_centimeter()
-        self.file.save()
-        return self
-
-
-if __name__ == '__main__':
-    ruler_length = int(input('Ruler length (in centimeters): '))
-    ruler = Ruler(ruler_length)
-    ruler.draw()
+dwg.saveas(f'ruler_{args.length}cm.dxf')
