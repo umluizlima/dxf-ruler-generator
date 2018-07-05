@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setup(
     name="dxf-ruler-generator",
-    version="0.0.1",
+    version="0.0.2",
     author="Luiz Lima",
     author_email="umluizlima@gmail.com",
     license="MIT License",

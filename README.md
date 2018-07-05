@@ -24,7 +24,7 @@ The following command will create a file `ruler_7cm.dxf` on the current working 
 - Windows
 
 ```sh
->python -m dxf_ruler_generator 7
+dxf-ruler-generator 7
 ```
 
 This is how the file looks like when imported on a laser fabrication software:
