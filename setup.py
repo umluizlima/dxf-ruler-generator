@@ -15,6 +15,11 @@ setup(
     url="https://github.com/umluizlima/dxf-ruler-generator",
     py_modules=['dxf_ruler_generator'],
     install_requires=['ezdxf'],
+    entry_points={
+        'console_scripts': [
+            'dxf-ruler-generator=dxf_ruler_generator:run',
+        ],
+    },
     classifiers=(
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",

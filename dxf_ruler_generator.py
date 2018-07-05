@@ -26,39 +26,45 @@ parser.add_argument("tick_width", metavar="TW", type=float,
                     help="a float for the tick's width, in milimeters.")
 args = parser.parse_args()
 
-dwg = ezdxf.new('R2010')
-dwg.layers.new(name='CUT', dxfattribs={'color': 7})
-dwg.layers.new(name='SCAN', dxfattribs={'color': 5})
 
-msp = dwg.modelspace()
+def run():
+    dwg = ezdxf.new('R2010')
+    dwg.layers.new(name='CUT', dxfattribs={'color': 7})
+    dwg.layers.new(name='SCAN', dxfattribs={'color': 5})
 
-ruler_outline = [(0, 0),
-                 (10*(args.length+1), 0),
-                 (10*(args.length+1), args.width),
-                 (0, args.width),
-                 (0, 0)]
-msp.add_lwpolyline(ruler_outline, dxfattribs={'layer': 'CUT'})
+    msp = dwg.modelspace()
 
-for mm in range(10*args.length+1):
-    x = mm + 5 - args.tick_width / 2
-    if mm == 0 or mm % 10 == 0:
-        tick_height = args.width / 3
-        msp.add_text(
-            str(mm//10),
-            dxfattribs={'rotation': 90,
-                        'height': 2,
-                        'layer': 'SCAN'}
-        ).set_pos((x-1, args.width-tick_height))
-    elif mm % 5 == 0:
-        tick_height = args.width / 6
-    else:
-        tick_height = args.width / 12
+    ruler_outline = [(0, 0),
+                     (10*(args.length+1), 0),
+                     (10*(args.length+1), args.width),
+                     (0, args.width),
+                     (0, 0)]
+    msp.add_lwpolyline(ruler_outline, dxfattribs={'layer': 'CUT'})
 
-    ruler_tick = [(x, args.width),
-                  (x, args.width-tick_height),
-                  (x+.25, args.width-tick_height),
-                  (x+.25, args.width),
-                  (x, args.width)]
-    msp.add_lwpolyline(ruler_tick, dxfattribs={'layer': 'SCAN'})
+    for mm in range(10*args.length+1):
+        x = mm + 5 - args.tick_width / 2
+        if mm == 0 or mm % 10 == 0:
+            tick_height = args.width / 3
+            msp.add_text(
+                str(mm//10),
+                dxfattribs={'rotation': 90,
+                            'height': 2,
+                            'layer': 'SCAN'}
+            ).set_pos((x-1, args.width-tick_height))
+        elif mm % 5 == 0:
+            tick_height = args.width / 6
+        else:
+            tick_height = args.width / 12
 
-dwg.saveas(f'ruler_{args.length}cm.dxf')
+        ruler_tick = [(x, args.width),
+                      (x, args.width-tick_height),
+                      (x+.25, args.width-tick_height),
+                      (x+.25, args.width),
+                      (x, args.width)]
+        msp.add_lwpolyline(ruler_tick, dxfattribs={'layer': 'SCAN'})
+
+    dwg.saveas(f'ruler_{args.length}cm.dxf')
+
+
+if __name__ == "__main__":
+    run()
