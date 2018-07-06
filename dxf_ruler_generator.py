@@ -12,6 +12,7 @@ Generate a 7cm ruler:
 This will create a 'ruler_7cm.dxf' on the current working directory.
 
 """
+import os.path
 from argparse import ArgumentParser
 import ezdxf
 
@@ -28,6 +29,7 @@ args = parser.parse_args()
 
 
 def run():
+    """Draw the ruler."""
     dwg = ezdxf.new('R2010')
     dwg.layers.new(name='CUT', dxfattribs={'color': 7})
     dwg.layers.new(name='SCAN', dxfattribs={'color': 5})
@@ -63,7 +65,9 @@ def run():
                       (x, args.width)]
         msp.add_lwpolyline(ruler_tick, dxfattribs={'layer': 'SCAN'})
 
-    dwg.saveas(f'ruler_{args.length}cm.dxf')
+    filename = f'ruler_{args.length}cm.dxf'
+    dwg.saveas(filename)
+    print(os.path.abspath(filename), end='')
 
 
 if __name__ == "__main__":
