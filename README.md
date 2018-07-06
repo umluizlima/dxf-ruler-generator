@@ -21,14 +21,20 @@ pip install dxf-ruler-generator
 
 The following command will create a file `ruler_7cm.dxf` on the current working directory:
 
-- Windows
-
+Windows:
 ```sh
-dxf-ruler-generator 7
+>dxf-ruler-generator 7
+C:\Users\Username\...\ruler_7cm.dxf
 ```
 
 This is how the file looks like when imported on a laser fabrication software:
 ![DXF file when imported on a laser fabrication software.](https://user-images.githubusercontent.com/9170476/31572344-5b1c9016-b07a-11e7-9cd1-1e7f935b248e.png)
+
+## Changelog
+
+- 0.0.3: print generated file abspath;
+- 0.0.2: 'dxf-ruler-generator' works on CLI;
+- 0.0.1: Initial release;
 
 ## Quick tip
 You might need to enable the importing of dxf text on the laser fabrication software. Here's an example on RDWorksV8:
