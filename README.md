@@ -13,18 +13,25 @@ The output file uses the **.dxf** extension, which can be used for laser cutting
 
 ## Installation
 
+- Windows
+
 ```sh
 pip install dxf-ruler-generator
+```
+
+- Linux
+
+```sh
+sudo pip3 install dxf-ruler-generator
 ```
 
 ## Usage example
 
 The following command will create a file `ruler_7cm.dxf` on the current working directory:
 
-Windows:
 ```sh
 >dxf-ruler-generator 7
-C:\Users\Username\...\ruler_7cm.dxf
+path\to\current\directory\ruler_7cm.dxf
 ```
 
 This is how the file looks like when imported on a laser fabrication software:
