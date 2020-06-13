@@ -34,6 +34,7 @@ This is how the file looks like when imported on a laser fabrication software:
 
 ## Changelog
 
+- 0.0.4: specify Python 3.6+ as required version;
 - 0.0.3: print generated file abspath;
 - 0.0.2: 'dxf-ruler-generator' works on CLI;
 - 0.0.1: Initial release;
