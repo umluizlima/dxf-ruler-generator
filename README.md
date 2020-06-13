@@ -11,27 +11,22 @@ This project consists of a Python script that takes an Integer as argument to dr
 
 The output file uses the **.dxf** extension, which can be used for laser cutting and engraving.
 
-## Installation
+## Requirements
 
-- Windows
+- Python 3.6+
+
+## Installation
 
 ```sh
 pip install dxf-ruler-generator
 ```
 
-- Linux
-
-```sh
-sudo pip3 install dxf-ruler-generator
-```
-
-## Usage example
+## Usage
 
 The following command will create a file `ruler_7cm.dxf` on the current working directory:
 
 ```sh
->dxf-ruler-generator 7
-path\to\current\directory\ruler_7cm.dxf
+dxf-ruler-generator 7
 ```
 
 This is how the file looks like when imported on a laser fabrication software:
