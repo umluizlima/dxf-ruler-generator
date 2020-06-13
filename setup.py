@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setup(
     name="dxf-ruler-generator",
-    version="0.0.3",
+    version="0.0.4",
     author="Luiz Lima",
     author_email="umluizlima@gmail.com",
     license="MIT License",
@@ -13,6 +13,7 @@ setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/umluizlima/dxf-ruler-generator",
+    python_requires=">=3.6.0",
     py_modules=['dxf_ruler_generator'],
     install_requires=['ezdxf'],
     entry_points={
