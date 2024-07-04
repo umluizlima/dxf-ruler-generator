@@ -14,11 +14,11 @@ setup(
     long_description_content_type="text/markdown",
     url="https://github.com/umluizlima/dxf-ruler-generator",
     python_requires=">=3.6.0",
-    py_modules=['dxf_ruler_generator'],
-    install_requires=['ezdxf'],
+    py_modules=["dxf_ruler_generator"],
+    install_requires=["ezdxf>=0.12.5,<1"],
     entry_points={
-        'console_scripts': [
-            'dxf-ruler-generator=dxf_ruler_generator:run',
+        "console_scripts": [
+            "dxf-ruler-generator=dxf_ruler_generator:run",
         ],
     },
     classifiers=(
